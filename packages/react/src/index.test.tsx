@@ -41,6 +41,22 @@ describe("@agent-face/react", () => {
     expect(markup).toContain('aria-hidden="true"');
   });
 
+  it("supports avatar loading placeholder mode", () => {
+    const config = generateAgentFaceConfig("react-avatar-loading");
+    const fallbackSrc = renderAgentFaceSvgDataUri(config);
+    const markup = renderToStaticMarkup(
+      <AgentFace
+        imageUrl="https://example.com/avatar.png"
+        loadingShowcaseMode="avatar"
+        seed="react-avatar-loading"
+      />
+    );
+
+    expect(markup).toContain('src="https://example.com/avatar.png"');
+    expect(markup).toContain(`src="${fallbackSrc}"`);
+    expect(markup).not.toContain("agentface-skeleton-pulse");
+  });
+
   it("prefers explicit config over seed generation", () => {
     const config = generateAgentFaceConfig("config-wins");
     const markup = renderToStaticMarkup(

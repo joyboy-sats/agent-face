@@ -18,6 +18,8 @@ function normalizeImageUrl(imageUrl?: string) {
   return normalized ? normalized : undefined;
 }
 
+export type LoadingShowcaseMode = "skeleton" | "avatar";
+
 const SKETCH_PLACEHOLDER_STYLE = `
 @keyframes agentface-skeleton-pulse {
   0%, 100% { opacity: 0.55; }
@@ -54,6 +56,26 @@ function createSketchPlaceholder() {
   );
 }
 
+function createAvatarPlaceholder(fallbackSrc: string, title: string) {
+  return h("img", {
+    alt: "",
+    "aria-hidden": "true",
+    src: fallbackSrc,
+    title,
+    style: {
+      position: "absolute",
+      inset: 0,
+      width: "100%",
+      height: "100%",
+      display: "block",
+      objectFit: "cover",
+      borderRadius: "inherit",
+      pointerEvents: "none",
+      background: "#f4f7fb",
+    } satisfies CSSProperties,
+  });
+}
+
 export const AgentFace = defineComponent({
   name: "AgentFace",
   inheritAttrs: false,
@@ -79,6 +101,10 @@ export const AgentFace = defineComponent({
     referrerPolicy: {
       type: String as PropType<HTMLImageElement["referrerPolicy"]>,
       default: "no-referrer",
+    },
+    loadingShowcaseMode: {
+      type: String as PropType<LoadingShowcaseMode>,
+      default: "skeleton",
     },
     title: {
       type: String,
@@ -144,7 +170,11 @@ export const AgentFace = defineComponent({
           "aria-label": props.title,
         },
         [
-          showPlaceholder.value ? createSketchPlaceholder() : null,
+          showPlaceholder.value
+            ? props.loadingShowcaseMode === "avatar"
+              ? createAvatarPlaceholder(fallbackSrc.value, props.title)
+              : createSketchPlaceholder()
+            : null,
           h("img", {
             alt: props.imageAlt ?? props.title,
             class: ["block h-full w-full object-cover", props.imageClassName],

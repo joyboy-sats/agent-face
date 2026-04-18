@@ -51,6 +51,26 @@ describe("@agent-face/vue", () => {
     expect(markup).toContain('aria-hidden="true"');
   });
 
+  it("supports avatar loading placeholder mode", async () => {
+    const config = generateAgentFaceConfig("vue-avatar-loading");
+    const fallbackSrc = renderAgentFaceSvgDataUri(config);
+    const app = createSSRApp({
+      render() {
+        return h(AgentFace, {
+          seed: "vue-avatar-loading",
+          imageUrl: "https://example.com/avatar.png",
+          loadingShowcaseMode: "avatar",
+        });
+      },
+    });
+
+    const markup = await renderAppToString(app);
+
+    expect(markup).toContain('src="https://example.com/avatar.png"');
+    expect(markup).toContain(`src="${fallbackSrc}"`);
+    expect(markup).not.toContain("agentface-skeleton-pulse");
+  });
+
   it("prefers explicit config over seed generation", async () => {
     const config = generateAgentFaceConfig("vue-config-wins");
     const app = createSSRApp({

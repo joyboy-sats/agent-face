@@ -22,6 +22,8 @@ function normalizeImageUrl(imageUrl?: string) {
   return normalized ? normalized : undefined;
 }
 
+export type LoadingShowcaseMode = "skeleton" | "avatar";
+
 const SKETCH_PLACEHOLDER_STYLE = `
 @keyframes agentface-skeleton-pulse {
   0%, 100% { opacity: 0.55; }
@@ -56,6 +58,28 @@ function createSketchPlaceholder() {
   );
 }
 
+function createAvatarPlaceholder(fallbackSrc: string, title: string) {
+  return (
+    <img
+      alt=""
+      aria-hidden="true"
+      src={fallbackSrc}
+      style={{
+        position: "absolute",
+        inset: 0,
+        width: "100%",
+        height: "100%",
+        display: "block",
+        objectFit: "cover",
+        borderRadius: "inherit",
+        pointerEvents: "none",
+        background: "#f4f7fb"
+      }}
+      title={title}
+    />
+  );
+}
+
 export interface AgentFaceProps {
   seed?: string;
   config?: AgentFaceConfig;
@@ -67,6 +91,7 @@ export interface AgentFaceProps {
   loading?: "eager" | "lazy";
   decoding?: "async" | "auto" | "sync";
   referrerPolicy?: ImgHTMLAttributes<HTMLImageElement>["referrerPolicy"];
+  loadingShowcaseMode?: LoadingShowcaseMode;
   title?: string;
 }
 
@@ -81,6 +106,7 @@ export function AgentFace({
   loading = "lazy",
   decoding = "async",
   referrerPolicy = "no-referrer",
+  loadingShowcaseMode = "skeleton",
   title = "AgentFace avatar"
 }: AgentFaceProps) {
   const resolvedConfig = useMemo(
@@ -134,7 +160,11 @@ export function AgentFace({
 
   return (
     <span aria-label={title} className={className} role="img" style={style} title={title}>
-      {showPlaceholder ? createSketchPlaceholder() : null}
+      {showPlaceholder
+        ? loadingShowcaseMode === "avatar"
+          ? createAvatarPlaceholder(fallbackSrc, title)
+          : createSketchPlaceholder()
+        : null}
       <img
         alt={imageAlt ?? title}
         className={joinClasses("block h-full w-full object-cover", imageClassName)}
