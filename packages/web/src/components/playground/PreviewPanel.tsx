@@ -15,7 +15,7 @@ export function PreviewPanel({ config, description, title, children }: PreviewPa
     <Card className="border-border/70 bg-card/92 shadow-sm backdrop-blur lg:sticky lg:top-6">
       <CardHeader className="pb-4">
         <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        {description ? <CardDescription>{description}</CardDescription> : null}
       </CardHeader>
       <CardContent className="space-y-5">
         <div className="grid min-h-[340px] place-items-center overflow-hidden rounded-[calc(var(--radius)+0.35rem)] border border-border/60 bg-[radial-gradient(circle_at_top,rgba(64,156,255,0.16),transparent_35%),linear-gradient(180deg,rgba(255,255,255,0.65),rgba(234,242,252,0.92))] p-4">

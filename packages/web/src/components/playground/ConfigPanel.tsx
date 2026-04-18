@@ -1,3 +1,4 @@
+import type { LoadingShowcaseMode } from "@/components/playground/LoadingShowcase";
 import type { AgentFaceOptionKey } from "@agent-face/core";
 import { AGENT_FACE_OPTIONS } from "@agent-face/core";
 
@@ -22,6 +23,8 @@ type ConfigPanelProps = {
   locale: Locale;
   values: Record<AgentFaceOptionKey, string>;
   onValueChange: (key: AgentFaceOptionKey, value: string) => void;
+  loadingShowcaseMode: LoadingShowcaseMode;
+  onLoadingShowcaseModeChange: (value: LoadingShowcaseMode) => void;
 };
 
 function ConfigField({
@@ -61,7 +64,13 @@ function ConfigField({
   );
 }
 
-export function ConfigPanel({ locale, values, onValueChange }: ConfigPanelProps) {
+export function ConfigPanel({
+  locale,
+  values,
+  onValueChange,
+  loadingShowcaseMode,
+  onLoadingShowcaseModeChange,
+}: ConfigPanelProps) {
   const copy = WEB_COPY[locale].configPanel;
 
   return (
@@ -71,6 +80,23 @@ export function ConfigPanel({ locale, values, onValueChange }: ConfigPanelProps)
         <CardDescription>{copy.description}</CardDescription>
       </CardHeader>
       <CardContent>
+        <div className="mb-4 space-y-3 rounded-[calc(var(--radius)-0.15rem)] border border-border/70 bg-background/80 p-4">
+          <div>
+            <p className="text-sm font-semibold">{copy.previewMode.label}</p>
+            <p className="mt-1 text-xs text-muted-foreground">{copy.previewMode.hint}</p>
+          </div>
+
+          <Select onValueChange={(value) => onLoadingShowcaseModeChange(value as LoadingShowcaseMode)} value={loadingShowcaseMode}>
+            <SelectTrigger>
+              <SelectValue placeholder={copy.previewMode.label} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="skeleton">{copy.previewMode.options.skeleton}</SelectItem>
+              <SelectItem value="avatar">{copy.previewMode.options.avatar}</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
         <Accordion className="space-y-3" defaultValue={copy.groups.map((group) => group.id)} type="multiple">
           {copy.groups.map((group) => (
             <AccordionItem key={group.id} value={group.id}>

@@ -98,6 +98,17 @@
   --radius-xl: calc(var(--radius) + 0.2rem);
 }
 
+@keyframes agentface-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 0.22;
+  }
+
+  50% {
+    opacity: 0.96;
+  }
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -120,5 +131,11 @@
   button,
   input {
     @apply font-sans;
+  }
+}
+
+@layer utilities {
+  .agentface-skeleton-pulse {
+    animation: agentface-skeleton-pulse 1.15s ease-in-out infinite;
   }
 }

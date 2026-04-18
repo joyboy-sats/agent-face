@@ -56,7 +56,9 @@ export function InfoAccordion({
           </div>
         </AccordionTrigger>
         <AccordionContent className="space-y-4">
-          <p className="text-sm text-muted-foreground">{copy.reactPanel.description}</p>
+          {copy.reactPanel.description ? (
+            <p className="text-sm text-muted-foreground">{copy.reactPanel.description}</p>
+          ) : null}
           <CodeBlock
             code={REACT_EXAMPLE}
             copied={isReactCopied}
@@ -75,7 +77,9 @@ export function InfoAccordion({
           </div>
         </AccordionTrigger>
         <AccordionContent className="space-y-4">
-          <p className="text-sm text-muted-foreground">{copy.vuePanel.description}</p>
+          {copy.vuePanel.description ? (
+            <p className="text-sm text-muted-foreground">{copy.vuePanel.description}</p>
+          ) : null}
           <CodeBlock
             code={VUE_EXAMPLE}
             copied={isVueCopied}

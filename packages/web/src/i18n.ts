@@ -65,6 +65,14 @@ export const WEB_COPY: Record<
     configPanel: {
       title: string;
       description: string;
+      previewMode: {
+        label: string;
+        hint: string;
+        options: {
+          avatar: string;
+          skeleton: string;
+        };
+      };
       fields: Record<AgentFaceOptionKey, FieldCopy>;
       groups: GroupCopy[];
       selectPrefix: string;
@@ -91,7 +99,7 @@ export const WEB_COPY: Record<
     },
     preview: {
       title: "Live Preview",
-      description: "预览始终是主视觉中心，所有交互围绕它展开。",
+      description: "",
     },
     input: {
       title: "Seed / Address",
@@ -107,7 +115,7 @@ export const WEB_COPY: Record<
     },
     reactPanel: {
       title: "在 React 中使用",
-      description: "直接复制示例即可嵌入项目。",
+      description: "",
       copy: "复制代码",
       copied: "已复制！",
     },
@@ -120,6 +128,14 @@ export const WEB_COPY: Record<
     configPanel: {
       title: "配置面板",
       description: "配置项按语义分组，默认全部展开。",
+      previewMode: {
+        label: "加载占位",
+        hint: "切换顶部头像从默认头像占位过渡，或使用纯 loading 骨架。",
+        options: {
+          avatar: "默认头像",
+          skeleton: "Skeleton",
+        },
+      },
       selectPrefix: "选择",
       fields: {
         shellType: { label: "头壳", hint: "决定头部轮廓和第一印象。" },
@@ -176,7 +192,7 @@ export const WEB_COPY: Record<
     },
     preview: {
       title: "Live Preview",
-      description: "The avatar stays central while every change updates immediately.",
+      description: "",
     },
     input: {
       title: "Seed / Address",
@@ -192,7 +208,7 @@ export const WEB_COPY: Record<
     },
     reactPanel: {
       title: "Use in React",
-      description: "Copy the snippet below and drop it into your project.",
+      description: "",
       copy: "Copy code",
       copied: "Copied!",
     },
@@ -205,6 +221,14 @@ export const WEB_COPY: Record<
     configPanel: {
       title: "Config Panel",
       description: "Options are grouped by meaning and expanded by default.",
+      previewMode: {
+        label: "Loading placeholder",
+        hint: "Switch the header avatar preview between a fallback avatar and a pure skeleton.",
+        options: {
+          avatar: "Default avatar",
+          skeleton: "Skeleton",
+        },
+      },
       selectPrefix: "Select ",
       fields: {
         shellType: { label: "Shell", hint: "Defines the head silhouette and first impression." },

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Globe } from "lucide-react";
 import {
   AGENT_FACE_DEFAULT_SEED,
   deserializeAgentFaceConfig,
@@ -14,12 +14,20 @@ import { ActionPanel } from "@/components/playground/ActionPanel";
 import { ConfigPanel } from "@/components/playground/ConfigPanel";
 import { InfoAccordion } from "@/components/playground/InfoAccordion";
 import { InputPanel } from "@/components/playground/InputPanel";
-import { LoadingShowcase } from "@/components/playground/LoadingShowcase";
+import {
+  LoadingShowcase,
+  type LoadingShowcaseMode,
+} from "@/components/playground/LoadingShowcase";
 import { PreviewPanel } from "@/components/playground/PreviewPanel";
 import { Button } from "@/components/ui/button";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "@/components/ui/select";
+import {
   DEFAULT_LOCALE,
-  LOCALE_LABELS,
   resolveInitialLocale,
   SUPPORTED_LOCALES,
   WEB_COPY,
@@ -38,10 +46,26 @@ function getInitialConfig(): AgentFaceConfig {
     : generateAgentFaceConfig(AGENT_FACE_DEFAULT_SEED);
 }
 
-function buildPlaygroundQuery(config: AgentFaceConfig, locale: Locale) {
+function getInitialLoadingShowcaseMode(): LoadingShowcaseMode {
+  if (typeof window === "undefined") {
+    return "skeleton";
+  }
+
+  const value = new URLSearchParams(window.location.search).get("previewLoading");
+  return value === "avatar" ? "avatar" : "skeleton";
+}
+
+function buildPlaygroundQuery(
+  config: AgentFaceConfig,
+  locale: Locale,
+  loadingShowcaseMode: LoadingShowcaseMode
+) {
   const params = new URLSearchParams(serializeAgentFaceConfig(config));
   if (locale !== DEFAULT_LOCALE) {
     params.set("lang", locale);
+  }
+  if (loadingShowcaseMode !== "skeleton") {
+    params.set("previewLoading", loadingShowcaseMode);
   }
   return params.toString();
 }
@@ -54,6 +78,9 @@ export function App() {
   const initialConfig = getInitialConfig();
   const [locale, setLocale] = useState<Locale>(resolveInitialLocale());
   const [config, setConfig] = useState<AgentFaceConfig>(initialConfig);
+  const [loadingShowcaseMode, setLoadingShowcaseMode] = useState<LoadingShowcaseMode>(
+    getInitialLoadingShowcaseMode()
+  );
   const [seedInput, setSeedInput] = useState(initialConfig.seed);
   const [isShareCopied, setIsShareCopied] = useState(false);
   const [isReactCopied, setIsReactCopied] = useState(false);
@@ -64,9 +91,9 @@ export function App() {
   const copy = WEB_COPY[locale];
 
   useEffect(() => {
-    const nextQuery = buildPlaygroundQuery(config, locale);
+    const nextQuery = buildPlaygroundQuery(config, locale, loadingShowcaseMode);
     window.history.replaceState({}, "", `${window.location.pathname}?${nextQuery}`);
-  }, [config, locale]);
+  }, [config, locale, loadingShowcaseMode]);
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -89,7 +116,10 @@ export function App() {
     };
   }, []);
 
-  const queryString = useMemo(() => buildPlaygroundQuery(config, locale), [config, locale]);
+  const queryString = useMemo(
+    () => buildPlaygroundQuery(config, locale, loadingShowcaseMode),
+    [config, locale, loadingShowcaseMode]
+  );
   const configJson = useMemo(() => JSON.stringify(config, null, 2), [config]);
   const shareLabel = isShareCopied ? copy.actions.shareCopied : copy.actions.share;
   const reactCopyLabel = isReactCopied ? copy.reactPanel.copied : copy.reactPanel.copy;
@@ -200,27 +230,29 @@ export function App() {
         </div>
 
         <div className="flex items-center gap-2">
-          <LoadingShowcase locale={locale} />
-          <div className="flex h-10 items-center gap-1 rounded-full border border-border/70 bg-background/70 p-1">
-            {SUPPORTED_LOCALES.map((nextLocale) => (
-              <Button
-                className={locale === nextLocale ? "shadow-sm" : undefined}
-                key={nextLocale}
-                onClick={() => setLocale(nextLocale)}
-                size="sm"
-                type="button"
-                variant={locale === nextLocale ? "secondary" : "ghost"}
-              >
-                {LOCALE_LABELS[nextLocale]}
-              </Button>
-            ))}
-          </div>
+          <Select onValueChange={(value) => setLocale(value as Locale)} value={locale}>
+            <SelectTrigger
+              aria-label="Select language"
+              className="size-10 justify-center rounded-full border border-border/70 bg-background/70 px-0 py-0 shadow-none focus:ring-2 focus:ring-ring/20"
+              hideIcon
+            >
+              <Globe className="size-4 opacity-70" />
+            </SelectTrigger>
+            <SelectContent align="end">
+              {SUPPORTED_LOCALES.map((nextLocale) => (
+                <SelectItem key={nextLocale} value={nextLocale}>
+                  {nextLocale === "zh-CN" ? "中文" : "EN"}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <Button asChild className="h-10" size="sm">
             <a href={GITHUB_URL} rel="noreferrer" target="_blank">
               <ExternalLink className="size-4" />
               {copy.header.githubCta}
             </a>
           </Button>
+          <LoadingShowcase config={config} mode={loadingShowcaseMode} />
         </div>
       </header>
 
@@ -262,6 +294,8 @@ export function App() {
 
           <ConfigPanel
             locale={locale}
+            loadingShowcaseMode={loadingShowcaseMode}
+            onLoadingShowcaseModeChange={setLoadingShowcaseMode}
             onValueChange={handleConfigChange}
             values={{
               shellType: config.shellType,
