@@ -3,6 +3,7 @@ import {
   deserializeAgentFaceConfig,
   generateAgentFaceConfig,
   renderAgentFaceSvg,
+  renderAgentFaceSvgDataUri,
   serializeAgentFaceConfig
 } from "./index";
 
@@ -20,6 +21,13 @@ describe("@agent-face/core", () => {
     expect(svg.startsWith("<svg")).toBe(true);
     expect(svg.includes("</svg>")).toBe(true);
     expect(svg.includes("viewBox=\"0 0 160 160\"")).toBe(true);
+  });
+
+  it("renders a data uri for svg fallback usage", () => {
+    const dataUri = renderAgentFaceSvgDataUri(generateAgentFaceConfig("agent-face-test"));
+
+    expect(dataUri.startsWith("data:image/svg+xml;charset=utf-8,")).toBe(true);
+    expect(dataUri.includes("%3Csvg")).toBe(true);
   });
 
   it("round-trips config serialization for url sync", () => {

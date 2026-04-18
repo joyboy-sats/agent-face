@@ -103,3 +103,32 @@ jobs:
       - name: Publish @agent-face/react
         working-directory: packages/react
         run: pnpm publish --no-git-checks
+
+  publish-vue:
+    needs: [verify, publish-core]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.23.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Publish @agent-face/vue
+        working-directory: packages/vue
+        run: pnpm publish --no-git-checks

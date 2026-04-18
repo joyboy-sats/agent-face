@@ -1,6 +1,6 @@
 # AgentFace
 
-[中文](./README.zh-CN.md)
+[中文](./README.zh-CN.md) 
 
 AgentFace is an open-source robot avatar system that maps a `seed`, wallet address, or any stable identifier to a deterministic, configurable SVG avatar.
 
@@ -14,6 +14,7 @@ AgentFace is an open-source robot avatar system that maps a `seed`, wallet addre
 packages/
   core/   deterministic config generation, URL serialization, SVG rendering
   react/  React wrapper
+  vue/    Vue wrapper
   web/    playground app
 ```
 
@@ -33,26 +34,7 @@ Install the published packages:
 ```bash
 pnpm add @agent-face/core
 pnpm add @agent-face/react
-```
-
-## Local Usage
-
-Start the playground locally:
-
-```bash
-pnpm dev
-```
-
-Default local URL:
-
-- `http://localhost:5173`
-
-Useful commands:
-
-```bash
-pnpm build
-pnpm typecheck
-pnpm test
+pnpm add @agent-face/vue
 ```
 
 ## Core Example
@@ -77,8 +59,20 @@ const restored = deserializeAgentFaceConfig(query);
 import { AgentFace } from "@agent-face/react";
 
 export function Example() {
-  return <AgentFace seed="demo-agent" size={120} />;
+  return <AgentFace seed="demo-agent" size={120} className="rounded-3xl shadow-sm" />;
 }
+```
+
+## Vue Example
+
+```vue
+<script setup lang="ts">
+import { AgentFace } from "@agent-face/vue";
+</script>
+
+<template>
+  <AgentFace seed="demo-agent" :size="120" class="rounded-3xl shadow-sm" />
+</template>
 ```
 
 ## Playground Usage
@@ -94,7 +88,9 @@ Current playground capabilities:
 
 - deterministic generation from `seed/address`
 - live preview
+- English / Chinese language switching
 - grouped config editing
 - shareable URL sync
 - config JSON copy
 - SVG export
+- package-level custom image URL with a sketch loading placeholder and AgentFace fallback

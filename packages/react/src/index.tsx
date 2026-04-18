@@ -1,15 +1,82 @@
-import type { CSSProperties } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+  type CSSProperties,
+  type ImgHTMLAttributes,
+} from "react";
 import {
   type AgentFaceConfig,
   generateAgentFaceConfig,
-  renderAgentFaceSvg
+  renderAgentFaceSvgDataUri
 } from "@agent-face/core";
+
+function joinClasses(...values: Array<string | undefined>) {
+  return values.filter(Boolean).join(" ");
+}
+
+function normalizeImageUrl(imageUrl?: string) {
+  const normalized = imageUrl?.trim();
+  return normalized ? normalized : undefined;
+}
+
+function createSketchPlaceholder() {
+  return (
+    <span
+      aria-hidden="true"
+      style={{
+        position: "absolute",
+        inset: 0,
+        overflow: "hidden",
+        borderRadius: "inherit",
+        pointerEvents: "none",
+        backgroundColor: "#f4f7fb",
+        backgroundImage: [
+          "radial-gradient(circle at 18% 18%, rgba(59, 130, 246, 0.10), transparent 28%)",
+          "radial-gradient(circle at 82% 22%, rgba(148, 163, 184, 0.16), transparent 22%)",
+          "linear-gradient(180deg, rgba(255,255,255,0.96), rgba(239,244,249,0.94))",
+          "repeating-linear-gradient(135deg, rgba(148,163,184,0.12) 0 10px, rgba(148,163,184,0.04) 10px 20px)"
+        ].join(", "),
+      }}
+    >
+      <span
+        style={{
+          position: "absolute",
+          inset: "22% 22% auto",
+          aspectRatio: "1 / 1",
+          borderRadius: "28%",
+          border: "1.5px dashed rgba(71, 85, 105, 0.22)",
+          background:
+            "linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.08))",
+        }}
+      />
+      <span
+        style={{
+          position: "absolute",
+          left: "28%",
+          right: "28%",
+          bottom: "21%",
+          height: "8%",
+          borderRadius: "999px",
+          background:
+            "linear-gradient(90deg, rgba(148,163,184,0.12), rgba(71,85,105,0.22), rgba(148,163,184,0.12))",
+        }}
+      />
+    </span>
+  );
+}
 
 export interface AgentFaceProps {
   seed?: string;
   config?: AgentFaceConfig;
   size?: number | string;
   className?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  imageClassName?: string;
+  loading?: "eager" | "lazy";
+  decoding?: "async" | "auto" | "sync";
+  referrerPolicy?: ImgHTMLAttributes<HTMLImageElement>["referrerPolicy"];
   title?: string;
 }
 
@@ -18,26 +85,78 @@ export function AgentFace({
   config,
   size = 160,
   className,
+  imageUrl,
+  imageAlt,
+  imageClassName,
+  loading = "lazy",
+  decoding = "async",
+  referrerPolicy = "no-referrer",
   title = "AgentFace avatar"
 }: AgentFaceProps) {
-  const resolvedConfig = config ?? generateAgentFaceConfig(seed ?? "");
-  const svgMarkup = renderAgentFaceSvg(resolvedConfig);
+  const resolvedConfig = useMemo(
+    () => config ?? generateAgentFaceConfig(seed ?? ""),
+    [config, seed]
+  );
+  const fallbackSrc = useMemo(
+    () => renderAgentFaceSvgDataUri(resolvedConfig),
+    [resolvedConfig]
+  );
+  const normalizedImageUrl = normalizeImageUrl(imageUrl);
+  const [currentSrc, setCurrentSrc] = useState(normalizedImageUrl ?? fallbackSrc);
+  const [isImageLoading, setIsImageLoading] = useState(Boolean(normalizedImageUrl));
+
+  useEffect(() => {
+    setCurrentSrc(normalizedImageUrl ?? fallbackSrc);
+    setIsImageLoading(Boolean(normalizedImageUrl));
+  }, [fallbackSrc, normalizedImageUrl]);
+
   const dimension = typeof size === "number" ? `${size}px` : size;
   const style: CSSProperties = {
     width: dimension,
     height: dimension,
     display: "inline-block",
-    lineHeight: 0
+    lineHeight: 0,
+    position: "relative",
+    overflow: "hidden",
+    background: "#f4f7fb"
+  };
+  const showPlaceholder = Boolean(normalizedImageUrl) && currentSrc !== fallbackSrc && isImageLoading;
+  const imageStyle: CSSProperties = {
+    width: "100%",
+    height: "100%",
+    display: "block",
+    objectFit: "cover",
+    borderRadius: "inherit",
+    opacity: showPlaceholder ? 0 : 1,
+    transition: "opacity 180ms ease"
   };
 
+  function handleImageLoad() {
+    setIsImageLoading(false);
+  }
+
+  function handleImageError() {
+    if (currentSrc !== fallbackSrc) {
+      setCurrentSrc(fallbackSrc);
+    }
+    setIsImageLoading(false);
+  }
+
   return (
-    <span
-      aria-label={title}
-      className={className}
-      role="img"
-      style={style}
-      dangerouslySetInnerHTML={{ __html: svgMarkup }}
-    />
+    <span aria-label={title} className={className} role="img" style={style} title={title}>
+      {showPlaceholder ? createSketchPlaceholder() : null}
+      <img
+        alt={imageAlt ?? title}
+        className={joinClasses("block h-full w-full object-cover", imageClassName)}
+        decoding={decoding}
+        loading={loading}
+        onError={handleImageError}
+        onLoad={handleImageLoad}
+        referrerPolicy={referrerPolicy}
+        src={currentSrc}
+        style={imageStyle}
+      />
+    </span>
   );
 }
 

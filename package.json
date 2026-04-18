@@ -7,12 +7,13 @@
   "workspaces": [
     "packages/core",
     "packages/react",
+    "packages/vue",
     "packages/web"
   ],
   "scripts": {
     "dev": "vite --config packages/web/vite.config.ts",
-    "build": "tsc -p packages/core/tsconfig.build.json && tsc -p packages/react/tsconfig.build.json && vite build --config packages/web/vite.config.ts",
-    "typecheck": "tsc -p packages/core/tsconfig.json --noEmit && tsc -p packages/react/tsconfig.json --noEmit && tsc -p packages/web/tsconfig.json --noEmit",
+    "build": "tsc -p packages/core/tsconfig.build.json && tsc -p packages/react/tsconfig.build.json && tsc -p packages/vue/tsconfig.build.json && vite build --config packages/web/vite.config.ts",
+    "typecheck": "tsc -p packages/core/tsconfig.json --noEmit && tsc -p packages/react/tsconfig.json --noEmit && tsc -p packages/vue/tsconfig.json --noEmit && tsc -p packages/web/tsconfig.json --noEmit",
     "test": "vitest run packages/core/src/index.test.ts",
     "release:version": "node scripts/release-version.mjs",
     "release:check": "node scripts/check-release-version.mjs"
@@ -29,6 +30,7 @@
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.9.3",
     "vite": "^7.1.10",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "vue": "^3.5.22"
   }
 }

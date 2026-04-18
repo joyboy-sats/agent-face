@@ -8,6 +8,7 @@ const rootDir = path.resolve(__dirname, "..");
 const packageFiles = [
   path.join(rootDir, "packages/core/package.json"),
   path.join(rootDir, "packages/react/package.json"),
+  path.join(rootDir, "packages/vue/package.json"),
 ];
 
 const nextVersion = process.argv[2];

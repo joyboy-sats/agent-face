@@ -14,6 +14,7 @@ AgentFace 是一个开源机器人头像系统，用于把 `seed`、wallet addre
 packages/
   core/   稳定配置生成、URL 序列化、SVG 渲染
   react/  React 组件封装
+  vue/    Vue 组件封装
   web/    playground 网站
 ```
 
@@ -33,6 +34,7 @@ pnpm install
 ```bash
 pnpm add @agent-face/core
 pnpm add @agent-face/react
+pnpm add @agent-face/vue
 ```
 
 ## 本地使用
@@ -77,8 +79,20 @@ const restored = deserializeAgentFaceConfig(query);
 import { AgentFace } from "@agent-face/react";
 
 export function Example() {
-  return <AgentFace seed="demo-agent" size={120} />;
+  return <AgentFace seed="demo-agent" size={120} className="rounded-3xl shadow-sm" />;
 }
+```
+
+## Vue 示例
+
+```vue
+<script setup lang="ts">
+import { AgentFace } from "@agent-face/vue";
+</script>
+
+<template>
+  <AgentFace seed="demo-agent" :size="120" class="rounded-3xl shadow-sm" />
+</template>
 ```
 
 ## Playground 用法
@@ -94,7 +108,9 @@ export function Example() {
 
 - 基于 `seed/address` 的稳定生成
 - 实时预览
+- 中英文切换
 - 分组配置编辑
 - URL 状态同步
 - 配置 JSON 复制
 - SVG 导出
+- 组件支持自定义图片链接，加载时显示轻量 sketch 占位图，失败时自动回退到 AgentFace 头像

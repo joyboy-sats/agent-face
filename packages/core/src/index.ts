@@ -258,6 +258,10 @@ export function renderAgentFaceSvg(config: AgentFaceConfig): string {
   ].join("");
 }
 
+export function renderAgentFaceSvgDataUri(config: AgentFaceConfig): string {
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(renderAgentFaceSvg(config))}`;
+}
+
 function createSeedDigest(seed: string): string {
   const source = `${seed}|agent-face|${seed.length}`;
   const reverseSource = `${source.split("").reverse().join("")}|v1`;

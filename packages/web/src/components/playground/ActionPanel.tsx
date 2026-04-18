@@ -3,6 +3,9 @@ import { Button } from "@/components/ui/button";
 
 type ActionPanelProps = {
   shareLabel: string;
+  downloadLabel: string;
+  randomLabel: string;
+  resetLabel: string;
   onCopyShare: () => void;
   onDownloadSvg: () => void;
   onRandom: () => void;
@@ -11,6 +14,9 @@ type ActionPanelProps = {
 
 export function ActionPanel({
   shareLabel,
+  downloadLabel,
+  randomLabel,
+  resetLabel,
   onCopyShare,
   onDownloadSvg,
   onRandom,
@@ -24,15 +30,15 @@ export function ActionPanel({
       </Button>
       <Button className="justify-center shadow-sm" onClick={onDownloadSvg} variant="secondary">
         <Download className="size-4" />
-        导出 SVG
+        {downloadLabel}
       </Button>
       <Button className="justify-center shadow-sm" onClick={onRandom} variant="secondary">
         <Shuffle className="size-4" />
-        随机生成
+        {randomLabel}
       </Button>
       <Button className="justify-center shadow-sm" onClick={onReset} variant="secondary">
         <RefreshCcw className="size-4" />
-        重置
+        {resetLabel}
       </Button>
     </div>
   );
