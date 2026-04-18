@@ -1,6 +1,6 @@
 {
   "name": "@agent-face/vue",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Vue wrapper for deterministic AgentFace robot avatars.",
   "license": "MIT",
   "type": "module",

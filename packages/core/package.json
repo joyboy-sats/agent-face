@@ -1,7 +1,7 @@
 {
   "name": "@agent-face/core",
-  "version": "1.0.3",
-  "description": "Deterministic seed-to-SVG robot avatar core for AgentFace.",
+  "version": "1.0.4",
+  "description": "Deterministic robot avatar generator from any seed — ideal for Ethereum/EVM wallet addresses.",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",

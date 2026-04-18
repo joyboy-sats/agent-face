@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { generateAgentFaceConfig, renderAgentFaceSvgDataUri } from "@agent-face/core";
@@ -5,6 +6,12 @@ import { generateAgentFaceConfig, renderAgentFaceSvgDataUri } from "@agent-face/
 import { AgentFace } from "./index";
 
 describe("@agent-face/react", () => {
+  it("marks the package entry as a client component", () => {
+    const source = readFileSync(new URL("./index.tsx", import.meta.url), "utf8");
+
+    expect(source.startsWith('"use client";')).toBe(true);
+  });
+
   it("renders a deterministic fallback avatar from seed", () => {
     const config = generateAgentFaceConfig("react-seed");
     const expectedSrc = renderAgentFaceSvgDataUri(config);
