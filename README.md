@@ -193,9 +193,34 @@ AgentFace Web 站点是标准 Vite 静态站点，适用于 Cloudflare Pages 的
 1. 在 npm 后台分别为 `@agent-face/core` 和 `@agent-face/react` 配置 Trusted Publisher
 2. 绑定 GitHub 仓库 `joyboy-sats/agent-face`
 3. 工作流文件名填写 `publish-packages.yml`
-4. 发布 GitHub Release，或手动触发 workflow
+4. 推送版本 tag，或手动触发 workflow
 
 这种方式不需要长期有效的 npm access token。
+
+### 推荐发版流程
+
+后续版本建议统一从仓库根目录执行：
+
+```bash
+pnpm release:version 1.0.1
+pnpm build
+pnpm typecheck
+pnpm test
+git add packages/core/package.json packages/react/package.json
+git commit -m "chore: release 1.0.1"
+git tag v1.0.1
+git push origin main --tags
+```
+
+之后可以：
+
+- 直接依赖 tag 触发 `.github/workflows/publish-packages.yml`
+- 或手动触发 workflow，并传入同样的版本号
+
+工作流会校验：
+
+- `packages/core` 和 `packages/react` 的版本是否一致
+- tag 版本是否与包版本一致
 
 ### 手动发布
 
