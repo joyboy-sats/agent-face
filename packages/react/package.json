@@ -1,9 +1,12 @@
 {
   "name": "@agent-face/react",
   "version": "0.1.0",
+  "description": "React wrapper for deterministic AgentFace robot avatars.",
+  "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -13,6 +16,25 @@
   "files": [
     "dist"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joyboy-sats/agent-face.git",
+    "directory": "packages/react"
+  },
+  "homepage": "https://github.com/joyboy-sats/agent-face#readme",
+  "bugs": {
+    "url": "https://github.com/joyboy-sats/agent-face/issues"
+  },
+  "keywords": [
+    "agentface",
+    "react",
+    "avatar",
+    "svg",
+    "robot"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json --noEmit"

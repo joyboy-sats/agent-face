@@ -1,6 +1,6 @@
 # AgentFace
 
-AgentFace 是一个开源机器人头像系统，用于把 `seed`、wallet address 或其他稳定标识映射为可复现、可配置、可嵌入的 SVG 头像。仓库采用 Monorepo 结构，包含核心生成库、React 组件封装和一个可直接部署到 Cloudflare Pages 的静态配置网站。
+AgentFace 是一个开源机器人头像系统，用于把 `seed`、wallet address 或其他稳定标识映射为可复现、可配置、可嵌入的 SVG 头像。仓库采用 Monorepo 结构，包含核心生成库、React 组件封装和一个面向开发者的 Web playground。
 
 ## 项目简介
 
@@ -176,3 +176,41 @@ AgentFace Web 站点是标准 Vite 静态站点，适用于 Cloudflare Pages 的
 - 部署对象是 `packages/web` 的 Vite 构建产物
 - 当前版本不依赖数据库、账号系统或服务端 API
 - 只需要在仓库根目录执行构建，然后发布 `packages/web/dist`
+
+## npm 发布
+
+当前仓库已经为 `@agent-face/core` 和 `@agent-face/react` 补齐了基础发布元数据，并提供了 GitHub Actions 发布工作流。
+
+发布前请先确认两件事：
+
+- 你拥有 npm scope `@agent-face` 的发布权限
+- 包版本号已经更新，避免重复发布同一版本
+
+### 推荐方式：GitHub Actions Trusted Publishing
+
+仓库内已提供 `.github/workflows/publish-packages.yml`。推荐做法：
+
+1. 在 npm 后台分别为 `@agent-face/core` 和 `@agent-face/react` 配置 Trusted Publisher
+2. 绑定 GitHub 仓库 `joyboy-sats/agent-face`
+3. 工作流文件名填写 `publish-packages.yml`
+4. 发布 GitHub Release，或手动触发 workflow
+
+这种方式不需要长期有效的 npm access token。
+
+### 手动发布
+
+如果你打算在本地直接发布，需要先登录 npm：
+
+```bash
+npm login
+pnpm --filter @agent-face/core publish --access public
+pnpm --filter @agent-face/react publish --access public
+```
+
+如果不用 `npm login`，也可以在本地配置 npm access token。
+
+### 关于 npm Token
+
+- 使用 GitHub Actions Trusted Publishing：通常不需要创建长期 npm access token
+- 使用 GitHub Actions 但不用 Trusted Publishing：需要创建 npm token，并存成 GitHub Secret，例如 `NPM_TOKEN`
+- 在本地手动发布：需要先 `npm login`，或本地配置可发布的 npm token

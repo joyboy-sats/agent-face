@@ -1,9 +1,12 @@
 {
   "name": "@agent-face/core",
   "version": "0.1.0",
+  "description": "Deterministic seed-to-SVG robot avatar core for AgentFace.",
+  "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -13,6 +16,26 @@
   "files": [
     "dist"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joyboy-sats/agent-face.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/joyboy-sats/agent-face#readme",
+  "bugs": {
+    "url": "https://github.com/joyboy-sats/agent-face/issues"
+  },
+  "keywords": [
+    "agentface",
+    "avatar",
+    "svg",
+    "robot",
+    "seed",
+    "deterministic"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
