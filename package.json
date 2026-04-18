@@ -14,7 +14,7 @@
     "dev": "vite --config packages/web/vite.config.ts",
     "build": "tsc -p packages/core/tsconfig.build.json && tsc -p packages/react/tsconfig.build.json && tsc -p packages/vue/tsconfig.build.json && vite build --config packages/web/vite.config.ts",
     "typecheck": "tsc -p packages/core/tsconfig.json --noEmit && tsc -p packages/react/tsconfig.json --noEmit && tsc -p packages/vue/tsconfig.json --noEmit && tsc -p packages/web/tsconfig.json --noEmit",
-    "test": "vitest run packages/core/src/index.test.ts",
+    "test": "vitest run packages/core/src/index.test.ts packages/react/src/index.test.tsx packages/vue/src/index.test.ts",
     "release:version": "node scripts/release-version.mjs",
     "release:check": "node scripts/check-release-version.mjs"
   },
@@ -24,6 +24,7 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^5.0.4",
+    "@vue/server-renderer": "^3.5.22",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "tailwindcss": "^4.2.2",
