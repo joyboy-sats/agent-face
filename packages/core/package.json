@@ -1,6 +1,6 @@
 {
   "name": "@agent-face/core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Deterministic seed-to-SVG robot avatar core for AgentFace.",
   "license": "MIT",
   "type": "module",
