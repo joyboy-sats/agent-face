@@ -1,6 +1,6 @@
 {
   "name": "@agent-face/core",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Deterministic seed-to-SVG robot avatar core for AgentFace.",
   "license": "MIT",
   "type": "module",
@@ -38,6 +38,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
+    "prepack": "pnpm build",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run"
   }
