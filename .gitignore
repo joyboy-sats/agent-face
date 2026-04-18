@@ -1,0 +1,14 @@
+.DS_Store
+node_modules/
+dist/
+coverage/
+.agents/
+.claude/
+.cursor/
+_bmad-output/
+_bmad/docs/
+PRODUCT.md
+**/*prd*.md
+**/*brief*.md
+**/*brainstorm*.md
+**/*research*.md
