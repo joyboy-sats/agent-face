@@ -2,7 +2,9 @@
 
 [中文](./README.zh-CN.md) 
 
-AgentFace is an open-source robot avatar system that maps a `seed`, wallet address, or any stable identifier to a deterministic, configurable SVG avatar.
+AgentFace generates deterministic SVG robot avatars from wallet addresses, public keys, hashes, and any stable string.
+
+Built for wallet UIs, onchain profiles, social cards, dashboards, and crypto apps.
 
 ## Live Playground
 
@@ -17,6 +19,13 @@ packages/
   vue/    Vue wrapper
   web/    playground app
 ```
+
+## Why AgentFace
+
+- Chain-agnostic: works with EVM, Solana, Bitcoin, and any other ecosystem as long as you have a stable string.
+- SVG-first: deterministic output you can render, export, cache, and theme without a backend.
+- Frontend-friendly: use the same config model in core, React, Vue, and the playground.
+- Identity-ready: good fit for wallet connection states, profile chips, member lists, and portfolio views.
 
 ## Install
 

@@ -1,7 +1,7 @@
 {
   "name": "@agent-face/core",
-  "version": "1.0.4",
-  "description": "Deterministic robot avatar generator from any seed — ideal for Ethereum/EVM wallet addresses.",
+  "version": "1.0.5",
+  "description": "Chain-agnostic deterministic SVG avatar generator for wallet addresses, public keys, hashes, and any stable string.",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -31,7 +31,26 @@
     "svg",
     "robot",
     "seed",
-    "deterministic"
+    "deterministic",
+    "deterministic-avatar",
+    "svg-avatar",
+    "wallet-avatar",
+    "address-avatar",
+    "crypto-avatar",
+    "hash-avatar",
+    "seed-avatar",
+    "wallet-address",
+    "public-key",
+    "web3-ui",
+    "wallet-ui",
+    "onchain-identity",
+    "profile-avatar",
+    "ethereum",
+    "evm",
+    "solana",
+    "bitcoin",
+    "evm-address",
+    "multichain-avatar"
   ],
   "publishConfig": {
     "access": "public"

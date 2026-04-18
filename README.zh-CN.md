@@ -2,7 +2,9 @@
 
 [English](./README.md)
 
-AgentFace 是一个开源机器人头像系统，用于把 `seed`、wallet address 或其他稳定标识映射为稳定、可配置、可复现的 SVG 头像。
+AgentFace 用于把钱包地址、公钥、哈希或任意稳定字符串映射为稳定、可复现的 SVG 机器人头像。
+
+适合用于钱包 UI、链上身份页、社交卡片、数据面板和各类加密应用。
 
 ## 在线 Playground
 
@@ -17,6 +19,13 @@ packages/
   vue/    Vue 组件封装
   web/    playground 网站
 ```
+
+## 为什么用 AgentFace
+
+- 链无关：不局限于 Ethereum，也适用于 EVM、Solana、Bitcoin 以及任何能提供稳定字符串的系统。
+- SVG 优先：输出稳定、可导出、可缓存、可主题化，不依赖后端服务。
+- 前端友好：`core`、React、Vue 和 playground 共享同一套配置模型。
+- 适合身份场景：可直接用于钱包连接态、地址徽章、成员列表、个人资料卡和资产面板。
 
 ## 安装
 

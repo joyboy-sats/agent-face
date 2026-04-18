@@ -18,6 +18,13 @@ function normalizeImageUrl(imageUrl?: string) {
   return normalized ? normalized : undefined;
 }
 
+const SKETCH_PLACEHOLDER_STYLE = `
+@keyframes agentface-skeleton-pulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 0.92; }
+}
+`;
+
 function createSketchPlaceholder() {
   return h(
     "span",
@@ -29,36 +36,18 @@ function createSketchPlaceholder() {
         overflow: "hidden",
         borderRadius: "inherit",
         pointerEvents: "none",
-        backgroundColor: "#f4f7fb",
-        backgroundImage: [
-          "radial-gradient(circle at 18% 18%, rgba(59, 130, 246, 0.10), transparent 28%)",
-          "radial-gradient(circle at 82% 22%, rgba(148, 163, 184, 0.16), transparent 22%)",
-          "linear-gradient(180deg, rgba(255,255,255,0.96), rgba(239,244,249,0.94))",
-          "repeating-linear-gradient(135deg, rgba(148,163,184,0.12) 0 10px, rgba(148,163,184,0.04) 10px 20px)",
-        ].join(", "),
+        backgroundColor: "#f8fafc",
       } satisfies CSSProperties,
     },
     [
+      h("style", SKETCH_PLACEHOLDER_STYLE),
       h("span", {
         style: {
           position: "absolute",
-          inset: "22% 22% auto",
-          aspectRatio: "1 / 1",
-          borderRadius: "28%",
-          border: "1.5px dashed rgba(71, 85, 105, 0.22)",
-          background: "linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.08))",
-        } satisfies CSSProperties,
-      }),
-      h("span", {
-        style: {
-          position: "absolute",
-          left: "28%",
-          right: "28%",
-          bottom: "21%",
-          height: "8%",
+          inset: 0,
           borderRadius: "999px",
-          background:
-            "linear-gradient(90deg, rgba(148,163,184,0.12), rgba(71,85,105,0.22), rgba(148,163,184,0.12))",
+          background: "rgba(241, 245, 249, 0.95)",
+          animation: "agentface-skeleton-pulse 1.5s ease-in-out infinite",
         } satisfies CSSProperties,
       }),
     ],

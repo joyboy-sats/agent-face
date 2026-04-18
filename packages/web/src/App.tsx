@@ -14,6 +14,7 @@ import { ActionPanel } from "@/components/playground/ActionPanel";
 import { ConfigPanel } from "@/components/playground/ConfigPanel";
 import { InfoAccordion } from "@/components/playground/InfoAccordion";
 import { InputPanel } from "@/components/playground/InputPanel";
+import { LoadingShowcase } from "@/components/playground/LoadingShowcase";
 import { PreviewPanel } from "@/components/playground/PreviewPanel";
 import { Button } from "@/components/ui/button";
 import {
@@ -199,6 +200,7 @@ export function App() {
         </div>
 
         <div className="flex items-center gap-2">
+          <LoadingShowcase locale={locale} />
           <div className="flex h-10 items-center gap-1 rounded-full border border-border/70 bg-background/70 p-1">
             {SUPPORTED_LOCALES.map((nextLocale) => (
               <Button

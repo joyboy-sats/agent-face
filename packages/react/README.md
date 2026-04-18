@@ -1,6 +1,6 @@
 # @agent-face/react
 
-React wrapper for deterministic AgentFace robot avatars.
+React wrapper for deterministic crypto avatars from wallet addresses, public keys, hashes, and any stable string.
 
 ## Install
 
@@ -44,6 +44,7 @@ export function Example() {
 ## Notes
 
 - `seed` and `config` are both supported.
+- Good fit for wallet UIs, onchain profile cards, member lists, and portfolio dashboards.
 - When `config` is provided, it takes precedence over generated config.
 - When `imageUrl` is provided, the component shows a lightweight sketch placeholder while the image is loading.
 - When `imageUrl` fails to load, the component automatically falls back to the generated AgentFace avatar.

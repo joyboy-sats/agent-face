@@ -1,6 +1,6 @@
 # @agent-face/vue
 
-Vue wrapper for deterministic AgentFace robot avatars.
+Vue wrapper for deterministic crypto avatars from wallet addresses, public keys, hashes, and any stable string.
 
 ## Install
 
@@ -33,3 +33,4 @@ import { AgentFace } from "@agent-face/vue";
 
 If `imageUrl` is provided, the component shows a lightweight sketch placeholder while the image is loading.
 If `imageUrl` fails to load, the component falls back to the generated AgentFace avatar.
+Good fit for wallet UIs, onchain profile cards, member lists, and portfolio dashboards.

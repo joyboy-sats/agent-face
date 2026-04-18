@@ -1,6 +1,6 @@
 # @agent-face/core
 
-Deterministic seed-to-SVG robot avatar core for AgentFace.
+Chain-agnostic deterministic SVG avatar core for wallet addresses, public keys, hashes, and any stable string.
 
 ## Install
 
@@ -35,5 +35,6 @@ const restored = deserializeAgentFaceConfig(query);
 ## Notes
 
 - Same seed always produces the same config.
+- Works well with wallet addresses, public keys, hashes, ENS-style names, and other stable identifiers.
 - SVG output is a complete string and does not depend on the browser DOM.
 - Repository: https://github.com/joyboy-sats/agent-face

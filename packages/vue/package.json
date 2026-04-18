@@ -1,7 +1,7 @@
 {
   "name": "@agent-face/vue",
-  "version": "1.0.4",
-  "description": "Vue wrapper for deterministic AgentFace robot avatars.",
+  "version": "1.0.5",
+  "description": "Vue component for deterministic crypto avatars from wallet addresses, public keys, hashes, and any stable string.",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -30,7 +30,27 @@
     "vue",
     "avatar",
     "svg",
-    "robot"
+    "robot",
+    "vue-avatar",
+    "deterministic-avatar",
+    "svg-avatar",
+    "wallet-avatar",
+    "address-avatar",
+    "crypto-avatar",
+    "hash-avatar",
+    "seed-avatar",
+    "wallet-address",
+    "public-key",
+    "web3-ui",
+    "wallet-ui",
+    "onchain-identity",
+    "profile-avatar",
+    "ethereum",
+    "evm",
+    "solana",
+    "bitcoin",
+    "multichain-avatar",
+    "dapp-avatar"
   ],
   "publishConfig": {
     "access": "public"
