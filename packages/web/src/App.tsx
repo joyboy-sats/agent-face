@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ExternalLink, RotateCcw } from "lucide-react";
+import { ExternalLink, FileJson2 } from "lucide-react";
 import {
   AGENT_FACE_DEFAULT_SEED,
   deserializeAgentFaceConfig,
@@ -11,7 +11,9 @@ import {
 } from "@agent-face/core";
 
 import { ActionPanel } from "@/components/playground/ActionPanel";
+import { ConfigDrawer } from "@/components/playground/ConfigDrawer";
 import { ConfigPanel } from "@/components/playground/ConfigPanel";
+import { InfoDrawer } from "@/components/playground/InfoDrawer";
 import { InputPanel } from "@/components/playground/InputPanel";
 import { PreviewPanel } from "@/components/playground/PreviewPanel";
 import { Button } from "@/components/ui/button";
@@ -28,10 +30,6 @@ function getInitialConfig(): AgentFaceConfig {
     : generateAgentFaceConfig(AGENT_FACE_DEFAULT_SEED);
 }
 
-function getInitialEdited(config: AgentFaceConfig) {
-  return JSON.stringify(config) !== JSON.stringify(generateAgentFaceConfig(config.seed));
-}
-
 function createRandomSeed() {
   return `agent-${Math.random().toString(36).slice(2, 8)}`;
 }
@@ -40,9 +38,11 @@ export function App() {
   const initialConfig = getInitialConfig();
   const [config, setConfig] = useState<AgentFaceConfig>(initialConfig);
   const [seedInput, setSeedInput] = useState(initialConfig.seed);
-  const [isEdited, setIsEdited] = useState(getInitialEdited(initialConfig));
   const [shareLabel, setShareLabel] = useState("复制分享链接");
+  const [reactCopyLabel, setReactCopyLabel] = useState("复制代码");
+  const [isConfigDrawerOpen, setIsConfigDrawerOpen] = useState(false);
   const shareTimerRef = useRef<number | null>(null);
+  const reactCopyTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const nextQuery = serializeAgentFaceConfig(config);
@@ -54,6 +54,9 @@ export function App() {
       if (shareTimerRef.current) {
         window.clearTimeout(shareTimerRef.current);
       }
+      if (reactCopyTimerRef.current) {
+        window.clearTimeout(reactCopyTimerRef.current);
+      }
     };
   }, []);
 
@@ -63,7 +66,6 @@ export function App() {
   function applySeed(seed: string, syncInput = true) {
     const nextConfig = generateAgentFaceConfig(seed);
     setConfig(nextConfig);
-    setIsEdited(false);
     if (syncInput) {
       setSeedInput(nextConfig.seed);
     }
@@ -72,12 +74,10 @@ export function App() {
   function handleSeedChange(value: string) {
     setSeedInput(value);
     setConfig(generateAgentFaceConfig(value));
-    setIsEdited(false);
   }
 
   function handleConfigChange(key: AgentFaceOptionKey, value: string) {
     setConfig((current) => ({ ...current, [key]: value }));
-    setIsEdited(true);
   }
 
   async function copyText(content: string) {
@@ -108,6 +108,19 @@ export function App() {
     void copyText(shareUrl).then(showCopiedLabel);
   }
 
+  function handleCopyReactExample() {
+    const reactExample = `import { AgentFace } from '@agent-face/react'\n<AgentFace seed="your-seed" size={120} />`;
+    void copyText(reactExample).then(() => {
+      setReactCopyLabel("已复制！");
+      if (reactCopyTimerRef.current) {
+        window.clearTimeout(reactCopyTimerRef.current);
+      }
+      reactCopyTimerRef.current = window.setTimeout(() => {
+        setReactCopyLabel("复制代码");
+      }, 1500);
+    });
+  }
+
   function handleCopyConfig() {
     void copyText(configJson);
   }
@@ -131,6 +144,18 @@ export function App() {
     applySeed(config.seed);
   }
 
+  const infoActions = (
+    <Button
+      onClick={() => setIsConfigDrawerOpen(true)}
+      size="sm"
+      type="button"
+      variant="outline"
+    >
+      <FileJson2 className="size-4" />
+      配置详情
+    </Button>
+  );
+
   return (
     <div className="mx-auto min-h-screen w-full max-w-[1500px] px-4 py-5 md:px-6 lg:px-8">
       <header className="mb-5 flex flex-col gap-4 border-b border-border/70 pb-4 md:flex-row md:items-center md:justify-between">
@@ -148,36 +173,32 @@ export function App() {
               GitHub
             </a>
           </Button>
-          <Button onClick={handleReset} size="sm" variant="ghost">
-            <RotateCcw className="size-4" />
-            Reset
-          </Button>
         </div>
       </header>
 
       <main className="grid gap-5 lg:grid-cols-[minmax(420px,520px)_minmax(0,1fr)] xl:grid-cols-[520px_minmax(0,1fr)]">
         <section className="order-2 lg:order-1">
-          <PreviewPanel config={config} isEdited={isEdited} />
-        </section>
-
-        <section className="order-1 space-y-5 lg:order-2">
-          <InputPanel
-            normalizedSeed={config.seed}
-            onChange={handleSeedChange}
-            palette={config.colorPalette}
-            value={seedInput}
+          <PreviewPanel
+            config={config}
+            infoPanel={
+              <InfoDrawer
+                copyLabel={reactCopyLabel}
+                onCopyCode={handleCopyReactExample}
+              />
+            }
           >
             <ActionPanel
-              configJson={configJson}
-              onCopyConfig={handleCopyConfig}
               onCopyShare={handleCopyShareLink}
               onDownloadSvg={handleDownloadSvg}
               onRandom={handleRandomGenerate}
               onReset={handleReset}
-              queryString={queryString}
               shareLabel={shareLabel}
             />
-          </InputPanel>
+          </PreviewPanel>
+        </section>
+
+        <section className="order-1 space-y-5 lg:order-2">
+          <InputPanel actions={infoActions} onChange={handleSeedChange} value={seedInput} />
 
           <ConfigPanel
             onValueChange={handleConfigChange}
@@ -197,6 +218,14 @@ export function App() {
           />
         </section>
       </main>
+
+      <ConfigDrawer
+        configJson={configJson}
+        isOpen={isConfigDrawerOpen}
+        onClose={() => setIsConfigDrawerOpen(false)}
+        onCopyConfig={handleCopyConfig}
+        queryString={queryString}
+      />
     </div>
   );
 }
