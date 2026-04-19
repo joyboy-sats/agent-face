@@ -2,37 +2,49 @@
 
 [中文](./README.zh-CN.md) 
 
-AgentFace generates deterministic SVG robot avatars from wallet addresses, public keys, hashes, and any stable string.
+Deterministic SVG robot avatars for agents, wallet addresses, and pseudonymous identities.
 
-Built for wallet UIs, onchain profiles, social cards, dashboards, and crypto apps.
+![AgentFace avatar gallery](./docs/images/avatar-grid.svg)
+
+AgentFace maps wallet addresses, public keys, hashes, and any stable string to a reproducible robot avatar that fits directly into product UI.
+
+Built for:
+
+- agent profiles
+- wallet and address UIs
+- onchain identity pages
+- member lists and dashboards
+- social cards and community products
 
 ## Live Playground
 
-- Website: https://agent-face.ch4.app
+- Try it now: https://agent-face.ch4.app
 
-## Packages
+![AgentFace playground preview](./docs/images/playground-preview.png)
 
-```text
-packages/
-  core/   deterministic config generation, URL serialization, SVG rendering
-  react/  React wrapper
-  vue/    Vue wrapper
-  web/    playground app
-```
+In the playground you can:
+
+- enter a `seed`, address, or any stable identifier
+- preview the generated avatar in real time
+- tweak grouped options with URL sync
+- export SVG or copy the config JSON
 
 ## Why AgentFace
 
-- Chain-agnostic: works with EVM, Solana, Bitcoin, and any other ecosystem as long as you have a stable string.
-- SVG-first: deterministic output you can render, export, cache, and theme without a backend.
-- Frontend-friendly: use the same config model in core, React, Vue, and the playground.
-- Identity-ready: good fit for wallet connection states, profile chips, member lists, and portfolio views.
+- Deterministic by default: the same input always produces the same avatar, which makes it useful for identity surfaces and caching.
+- SVG-first: render, export, cache, theme, and embed without relying on a backend image pipeline.
+- Chain-agnostic: works with EVM, Solana, Bitcoin, and any other system with a stable identifier.
+- Frontend-friendly: use the same config model across `core`, React, Vue, and the playground.
+- Identity-ready: fits wallet connection states, avatar badges, address lists, member directories, and profile cards.
 
-## Install
+## Quick Start
 
 Recommended environment:
 
 - Node.js `20+`
 - pnpm `10+`
+
+Install dependencies:
 
 ```bash
 pnpm install
@@ -46,7 +58,7 @@ pnpm add @agent-face/react
 pnpm add @agent-face/vue
 ```
 
-## Core Example
+### Core Example
 
 ```ts
 import {
@@ -62,7 +74,7 @@ const query = serializeAgentFaceConfig(config);
 const restored = deserializeAgentFaceConfig(query);
 ```
 
-## React Example
+### React Example
 
 ```tsx
 import { AgentFace } from "@agent-face/react";
@@ -72,7 +84,7 @@ export function Example() {
 }
 ```
 
-## Vue Example
+### Vue Example
 
 ```vue
 <script setup lang="ts">
@@ -84,22 +96,32 @@ import { AgentFace } from "@agent-face/vue";
 </template>
 ```
 
-## Playground Usage
+## Packages
 
-The web playground is designed around a simple flow:
+```text
+packages/
+  core/   deterministic config generation, URL serialization, SVG rendering
+  react/  React wrapper
+  vue/    Vue wrapper
+  web/    playground app
+```
 
-1. Enter a `seed` or address
-2. Preview the generated avatar
-3. Adjust grouped options
-4. Copy a share link or export SVG
+## Local Development
 
-Current playground capabilities:
+Run the playground locally:
 
-- deterministic generation from `seed/address`
-- live preview
-- English / Chinese language switching
-- grouped config editing
-- shareable URL sync
-- config JSON copy
-- SVG export
-- package-level custom image URL with a sketch loading placeholder and AgentFace fallback
+```bash
+pnpm dev
+```
+
+Default URL:
+
+- `http://localhost:5173`
+
+Common commands:
+
+```bash
+pnpm build
+pnpm typecheck
+pnpm test
+```
