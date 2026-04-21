@@ -1,0 +1,94 @@
+name: Bug Report
+description: Report a reproducible bug in core, React, Vue, or the playground.
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting an issue.
+
+        Please provide a minimal reproduction when possible. For UI issues, screenshots or a demo URL help a lot.
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Affected scope
+      description: Which package or area is affected?
+      options:
+        - packages/core
+        - packages/react
+        - packages/vue
+        - packages/web
+        - docs / README
+        - build / release
+        - other
+    validations:
+      required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: Describe the bug in one or two sentences.
+      placeholder: Rendering a config restored from URL produces a different avatar than the original config.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Provide exact steps to reproduce the issue.
+      placeholder: |
+        1. Open the playground with ...
+        2. Change ...
+        3. Copy the URL and reload
+        4. Observe ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      placeholder: The avatar should remain identical after reload.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      placeholder: The visor and accessory changed after reload.
+    validations:
+      required: true
+
+  - type: textarea
+    id: minimal_example
+    attributes:
+      label: Minimal reproduction or input
+      description: Paste a seed, config JSON, URL query, code snippet, or repository link if available.
+      render: text
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include the relevant environment details.
+      placeholder: |
+        - OS:
+        - Browser / runtime:
+        - Node.js:
+        - pnpm:
+        - Package version:
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional context
+      description: Add screenshots, logs, stack traces, or any extra details here.
+

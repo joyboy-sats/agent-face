@@ -1,0 +1,69 @@
+name: Feature Request
+description: Propose a new feature or improvement for AgentFace.
+title: "[Feature] "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please describe the user or developer value first.
+
+        Strong requests usually explain:
+        - who needs the feature
+        - what problem it solves
+        - why the current API or UI is not enough
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Suggested scope
+      description: Which area would this mostly affect?
+      options:
+        - packages/core
+        - packages/react
+        - packages/vue
+        - packages/web
+        - docs / README
+        - release / tooling
+        - cross-package
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem statement
+      description: What problem are you trying to solve?
+      placeholder: I need a way to control deterministic avatar generation while still preserving stable defaults.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the API, UI, or workflow you want.
+      placeholder: Add a new helper that accepts partial overrides and returns a normalized config.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: What are you doing today, and why is it not enough?
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Examples or references
+      description: Mockups, screenshots, API sketches, or comparable libraries are welcome.
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Expected impact
+      description: Who benefits, and what changes for them?
+      placeholder: This would simplify wallet UI integration and reduce custom glue code in React apps.
+
