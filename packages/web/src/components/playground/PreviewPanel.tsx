@@ -18,8 +18,8 @@ export function PreviewPanel({ config, description, title, children }: PreviewPa
         {description ? <CardDescription>{description}</CardDescription> : null}
       </CardHeader>
       <CardContent className="space-y-5">
-        <div className="grid min-h-[340px] place-items-center overflow-hidden rounded-[calc(var(--radius)+0.35rem)] border border-border/60 bg-[radial-gradient(circle_at_top,rgba(64,156,255,0.16),transparent_35%),linear-gradient(180deg,rgba(255,255,255,0.65),rgba(234,242,252,0.92))] p-4">
-          <div className="grid place-items-center rounded-[calc(var(--radius)+0.1rem)] border border-border/50 bg-background/60 p-5 shadow-sm backdrop-blur">
+        <div className="grid min-h-[280px] place-items-center overflow-hidden rounded-[calc(var(--radius)+0.35rem)] border border-border/60 bg-[radial-gradient(circle_at_top,rgba(64,156,255,0.16),transparent_35%),linear-gradient(180deg,rgba(255,255,255,0.65),rgba(234,242,252,0.92))] p-3 sm:min-h-[340px] sm:p-4">
+          <div className="grid scale-[0.9] place-items-center rounded-[calc(var(--radius)+0.1rem)] border border-border/50 bg-background/60 p-4 shadow-sm backdrop-blur sm:scale-100 sm:p-5">
             <AgentFace config={config} size={224} />
           </div>
         </div>

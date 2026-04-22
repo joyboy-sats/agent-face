@@ -8,7 +8,7 @@ export const SUPPORTED_LOCALES: Locale[] = ["zh-CN", "en"];
 
 export const LOCALE_LABELS: Record<Locale, string> = {
   "zh-CN": "中文",
-  en: "EN",
+  en: "English",
 };
 
 type FieldCopy = {
@@ -46,7 +46,9 @@ export const WEB_COPY: Record<
     actions: {
       share: string;
       shareCopied: string;
-      download: string;
+      exportSvg: string;
+      exportPng: string;
+      exportWebp: string;
       random: string;
       reset: string;
     };
@@ -109,19 +111,21 @@ export const WEB_COPY: Record<
     actions: {
       share: "复制分享链接",
       shareCopied: "已复制！",
-      download: "导出 SVG",
+      exportSvg: "导出 SVG",
+      exportPng: "导出 PNG",
+      exportWebp: "导出 WebP",
       random: "随机生成",
       reset: "重置",
     },
     reactPanel: {
       title: "在 React 中使用",
-      description: "",
+      description: "支持传入自定义图片 URL，加载中显示占位图，失败时自动回退到 AgentFace。",
       copy: "复制代码",
       copied: "已复制！",
     },
     vuePanel: {
       title: "在 Vue 中使用",
-      description: "直接复制示例即可嵌入项目。",
+      description: "同样支持自定义图片 URL，并保留稳定的 AgentFace 回退逻辑。",
       copy: "复制代码",
       copied: "已复制！",
     },
@@ -202,19 +206,21 @@ export const WEB_COPY: Record<
     actions: {
       share: "Copy share link",
       shareCopied: "Copied!",
-      download: "Export SVG",
+      exportSvg: "Export SVG",
+      exportPng: "Export PNG",
+      exportWebp: "Export WebP",
       random: "Randomize",
       reset: "Reset",
     },
     reactPanel: {
       title: "Use in React",
-      description: "",
+      description: "You can pass a custom image URL, show an avatar placeholder while loading, and fall back to AgentFace on error.",
       copy: "Copy code",
       copied: "Copied!",
     },
     vuePanel: {
       title: "Use in Vue",
-      description: "Copy the snippet below and drop it into your project.",
+      description: "The Vue component also supports custom image URLs with a deterministic AgentFace fallback.",
       copy: "Copy code",
       copied: "Copied!",
     },

@@ -27,7 +27,8 @@ In the playground you can:
 - enter a `seed`, address, or any stable identifier
 - preview the generated avatar in real time
 - tweak grouped options with URL sync
-- export SVG or copy the config JSON
+- export SVG, PNG, or WebP
+- copy the config JSON
 
 ## Why AgentFace
 
@@ -80,7 +81,16 @@ const restored = deserializeAgentFaceConfig(query);
 import { AgentFace } from "@agent-face/react";
 
 export function Example() {
-  return <AgentFace seed="demo-agent" size={120} className="rounded-3xl shadow-sm" />;
+  return (
+    <AgentFace
+      seed="demo-agent"
+      size={120}
+      imageUrl="https://example.com/avatar.png" // Optional
+      imageAlt="Custom avatar"
+      loadingShowcaseMode="skeleton" // skeleton/avatar (Optional)
+      className="rounded-3xl shadow-sm"
+    />
+  );
 }
 ```
 
@@ -92,9 +102,20 @@ import { AgentFace } from "@agent-face/vue";
 </script>
 
 <template>
-  <AgentFace seed="demo-agent" :size="120" class="rounded-3xl shadow-sm" />
+  <AgentFace
+    seed="demo-agent"
+    :size="120"
+    <!-- Optional: show your own image first -->
+    image-url="https://example.com/avatar.png"
+    image-alt="Custom avatar"
+    <!-- Optional: skeleton/avatar -->
+    loading-showcase-mode="skeleton"
+    class="rounded-3xl shadow-sm"
+  />
 </template>
 ```
+
+If `imageUrl` is provided, the component shows a lightweight placeholder while loading and automatically falls back to AgentFace if the image fails to load.
 
 ## Packages
 
@@ -104,24 +125,4 @@ packages/
   react/  React wrapper
   vue/    Vue wrapper
   web/    playground app
-```
-
-## Local Development
-
-Run the playground locally:
-
-```bash
-pnpm dev
-```
-
-Default URL:
-
-- `http://localhost:5173`
-
-Common commands:
-
-```bash
-pnpm build
-pnpm typecheck
-pnpm test
 ```

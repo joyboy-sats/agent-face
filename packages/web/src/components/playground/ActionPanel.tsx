@@ -3,22 +3,30 @@ import { Button } from "@/components/ui/button";
 
 type ActionPanelProps = {
   shareLabel: string;
-  downloadLabel: string;
+  exportSvgLabel: string;
+  exportPngLabel: string;
+  exportWebpLabel: string;
   randomLabel: string;
   resetLabel: string;
   onCopyShare: () => void;
-  onDownloadSvg: () => void;
+  onExportSvg: () => void;
+  onExportPng: () => void;
+  onExportWebp: () => void;
   onRandom: () => void;
   onReset: () => void;
 };
 
 export function ActionPanel({
   shareLabel,
-  downloadLabel,
+  exportSvgLabel,
+  exportPngLabel,
+  exportWebpLabel,
   randomLabel,
   resetLabel,
   onCopyShare,
-  onDownloadSvg,
+  onExportSvg,
+  onExportPng,
+  onExportWebp,
   onRandom,
   onReset,
 }: ActionPanelProps) {
@@ -28,9 +36,17 @@ export function ActionPanel({
         <Link2 className="size-4" />
         {shareLabel}
       </Button>
-      <Button className="justify-center shadow-sm" onClick={onDownloadSvg} variant="secondary">
+      <Button className="justify-center shadow-sm" onClick={onExportSvg} variant="secondary">
         <Download className="size-4" />
-        {downloadLabel}
+        {exportSvgLabel}
+      </Button>
+      <Button className="justify-center shadow-sm" onClick={onExportPng} variant="secondary">
+        <Download className="size-4" />
+        {exportPngLabel}
+      </Button>
+      <Button className="justify-center shadow-sm" onClick={onExportWebp} variant="secondary">
+        <Download className="size-4" />
+        {exportWebpLabel}
       </Button>
       <Button className="justify-center shadow-sm" onClick={onRandom} variant="secondary">
         <Shuffle className="size-4" />

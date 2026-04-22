@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/select";
 import {
   DEFAULT_LOCALE,
+  LOCALE_LABELS,
   resolveInitialLocale,
   SUPPORTED_LOCALES,
   WEB_COPY,
@@ -35,6 +36,7 @@ import {
 } from "@/i18n";
 
 const GITHUB_URL = "https://github.com/joyboy-sats/agent-face";
+const RASTER_EXPORT_SIZE = 640;
 
 function getInitialConfig(): AgentFaceConfig {
   if (typeof window === "undefined") {
@@ -171,7 +173,7 @@ export function App() {
   }
 
   function handleCopyReactExample() {
-    const reactExample = `import { AgentFace } from '@agent-face/react'\n<AgentFace seed="your-seed" size={120} />`;
+    const reactExample = `import { AgentFace } from '@agent-face/react'\n\n<AgentFace\n  seed="your-seed"\n  size={120}\n  imageUrl="https://example.com/avatar.png" // Optional\n  imageAlt="Custom avatar"\n  loadingShowcaseMode="skeleton" // skeleton/avatar (Optional)\n/>`;
     void copyText(reactExample).then(() => {
       setIsReactCopied(true);
       if (reactCopyTimerRef.current) {
@@ -184,7 +186,7 @@ export function App() {
   }
 
   function handleCopyVueExample() {
-    const vueExample = `<script setup lang="ts">\nimport { AgentFace } from '@agent-face/vue'\n</script>\n\n<template>\n  <AgentFace seed="your-seed" :size="120" />\n</template>`;
+    const vueExample = `<script setup lang="ts">\nimport { AgentFace } from '@agent-face/vue'\n</script>\n\n<template>\n  <AgentFace\n    seed="your-seed"\n    :size="120"\n    <!-- Optional: show your own image first -->\n    image-url="https://example.com/avatar.png"\n    image-alt="Custom avatar"\n    <!-- Optional: skeleton/avatar -->\n    loading-showcase-mode="skeleton"\n  />\n</template>`;
     void copyText(vueExample).then(() => {
       setIsVueCopied(true);
       if (vueCopyTimerRef.current) {
@@ -200,15 +202,54 @@ export function App() {
     void copyText(configJson);
   }
 
-  function handleDownloadSvg() {
-    const svg = renderAgentFaceSvg(config);
-    const blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
+  function downloadBlob(blob: Blob, extension: string) {
     const objectUrl = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = objectUrl;
-    anchor.download = `${config.seed.replace(/[^a-zA-Z0-9_-]+/g, "-") || "agentface"}.svg`;
+    anchor.download = `${config.seed.replace(/[^a-zA-Z0-9_-]+/g, "-") || "agentface"}.${extension}`;
     anchor.click();
     URL.revokeObjectURL(objectUrl);
+  }
+
+  function handleExportSvg() {
+    const svg = renderAgentFaceSvg(config);
+    const blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
+    downloadBlob(blob, "svg");
+  }
+
+  async function exportRasterImage(type: "png" | "webp") {
+    const svg = renderAgentFaceSvg(config);
+    const svgBlob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
+    const svgUrl = URL.createObjectURL(svgBlob);
+
+    try {
+      const image = await loadImage(svgUrl);
+      const canvas = document.createElement("canvas");
+      canvas.width = RASTER_EXPORT_SIZE;
+      canvas.height = RASTER_EXPORT_SIZE;
+
+      const context = canvas.getContext("2d");
+      if (!context) {
+        throw new Error("Canvas 2D context is not available.");
+      }
+
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+      const mimeType = type === "png" ? "image/png" : "image/webp";
+      const blob = await canvasToBlob(canvas, mimeType);
+      downloadBlob(blob, type);
+    } finally {
+      URL.revokeObjectURL(svgUrl);
+    }
+  }
+
+  function handleExportPng() {
+    void exportRasterImage("png");
+  }
+
+  function handleExportWebp() {
+    void exportRasterImage("webp");
   }
 
   function handleRandomGenerate() {
@@ -229,7 +270,7 @@ export function App() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 md:justify-end">
           <Select onValueChange={(value) => setLocale(value as Locale)} value={locale}>
             <SelectTrigger
               aria-label="Select language"
@@ -241,7 +282,7 @@ export function App() {
             <SelectContent align="end">
               {SUPPORTED_LOCALES.map((nextLocale) => (
                 <SelectItem key={nextLocale} value={nextLocale}>
-                  {nextLocale === "zh-CN" ? "中文" : "EN"}
+                  {LOCALE_LABELS[nextLocale]}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -257,12 +298,16 @@ export function App() {
       </header>
 
       <main className="grid gap-5 lg:grid-cols-[minmax(420px,520px)_minmax(0,1fr)] xl:grid-cols-[520px_minmax(0,1fr)]">
-        <section className="order-2 lg:order-1">
+        <section>
           <PreviewPanel config={config} description={copy.preview.description} title={copy.preview.title}>
             <ActionPanel
-              downloadLabel={copy.actions.download}
+              exportPngLabel={copy.actions.exportPng}
+              exportSvgLabel={copy.actions.exportSvg}
+              exportWebpLabel={copy.actions.exportWebp}
               onCopyShare={handleCopyShareLink}
-              onDownloadSvg={handleDownloadSvg}
+              onExportPng={handleExportPng}
+              onExportSvg={handleExportSvg}
+              onExportWebp={handleExportWebp}
               onRandom={handleRandomGenerate}
               onReset={handleReset}
               randomLabel={copy.actions.random}
@@ -272,7 +317,7 @@ export function App() {
           </PreviewPanel>
         </section>
 
-        <section className="order-1 space-y-5 lg:order-2">
+        <section className="space-y-5">
           <InfoAccordion
             configJson={configJson}
             locale={locale}
@@ -315,4 +360,26 @@ export function App() {
       </main>
     </div>
   );
+}
+
+function loadImage(url: string) {
+  return new Promise<HTMLImageElement>((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(new Error("Failed to load SVG for export."));
+    image.src = url;
+  });
+}
+
+function canvasToBlob(canvas: HTMLCanvasElement, type: string) {
+  return new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      if (!blob) {
+        reject(new Error(`Failed to export ${type}.`));
+        return;
+      }
+
+      resolve(blob);
+    }, type);
+  });
 }

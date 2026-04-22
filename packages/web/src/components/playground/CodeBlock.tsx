@@ -19,7 +19,51 @@ function renderPlain(line: string) {
   return line || "\u00A0";
 }
 
-function renderTsx(line: string) {
+function findTsxCommentStart(line: string) {
+  let quote: '"' | "'" | "`" | null = null;
+  let isEscaped = false;
+
+  for (let index = 0; index < line.length; index += 1) {
+    const current = line[index];
+    const next = line[index + 1];
+    const nextThree = line.slice(index, index + 4);
+
+    if (quote) {
+      if (isEscaped) {
+        isEscaped = false;
+        continue;
+      }
+
+      if (current === "\\") {
+        isEscaped = true;
+        continue;
+      }
+
+      if (current === quote) {
+        quote = null;
+      }
+
+      continue;
+    }
+
+    if (current === '"' || current === "'" || current === "`") {
+      quote = current;
+      continue;
+    }
+
+    if (current === "/" && next === "/") {
+      return index;
+    }
+
+    if (nextThree === "<!--") {
+      return index;
+    }
+  }
+
+  return -1;
+}
+
+function renderTsxTokens(line: string) {
   const parts: Array<{ text: string; className?: string }> = [];
   const pattern =
     /"(?:\\.|[^"])*"|'(?:\\.|[^'])*'|`(?:\\.|[^`])*`|\b(?:import|from|export|default|const|let|var|return|type|interface|extends|setup|template|script)\b|<\/?[A-Za-z][\w.-]*|[A-Za-z_$][\w$]*|[{}()[\],.:;<>/=]/g;
@@ -67,6 +111,24 @@ function renderTsx(line: string) {
       {part.text}
     </span>
   ));
+}
+
+function renderTsx(line: string) {
+  const commentIndex = findTsxCommentStart(line);
+
+  if (commentIndex === -1) {
+    return renderTsxTokens(line);
+  }
+
+  const codePart = line.slice(0, commentIndex);
+  const commentPart = line.slice(commentIndex);
+
+  return (
+    <>
+      {codePart ? renderTsxTokens(codePart) : null}
+      <span className="text-slate-500 italic">{commentPart}</span>
+    </>
+  );
 }
 
 function renderJson(line: string) {

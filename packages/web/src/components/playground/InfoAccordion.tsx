@@ -22,14 +22,29 @@ type InfoAccordionProps = {
 };
 
 const REACT_EXAMPLE = `import { AgentFace } from '@agent-face/react'
-<AgentFace seed="your-seed" size={120} />`;
+
+<AgentFace
+  seed="your-seed"
+  size={120}
+  imageUrl="https://example.com/avatar.png" // Optional
+  imageAlt="Custom avatar"
+  loadingShowcaseMode="skeleton" // skeleton/avatar (Optional)
+/>`;
 
 const VUE_EXAMPLE = `<script setup lang="ts">
 import { AgentFace } from '@agent-face/vue'
 </script>
 
 <template>
-  <AgentFace seed="your-seed" :size="120" />
+  <AgentFace
+    seed="your-seed"
+    :size="120"
+    <!-- Optional: show your own image first -->
+    image-url="https://example.com/avatar.png"
+    image-alt="Custom avatar"
+    <!-- Optional: skeleton/avatar -->
+    loading-showcase-mode="skeleton"
+  />
 </template>`;
 
 export function InfoAccordion({
