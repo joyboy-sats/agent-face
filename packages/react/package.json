@@ -1,6 +1,6 @@
 {
   "name": "@agent-face/react",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "description": "React component for deterministic crypto avatars from wallet addresses, public keys, hashes, and any stable string.",
   "license": "MIT",
   "type": "module",

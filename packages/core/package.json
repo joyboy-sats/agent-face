@@ -1,6 +1,6 @@
 {
   "name": "@agent-face/core",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "description": "Chain-agnostic deterministic SVG avatar generator for wallet addresses, public keys, hashes, and any stable string.",
   "license": "MIT",
   "type": "module",
