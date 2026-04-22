@@ -2,12 +2,15 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ExternalLink, Globe } from "lucide-react";
 import {
   AGENT_FACE_DEFAULT_SEED,
+  CHARACTER_TYPE_OPTION_KEYS,
   deserializeAgentFaceConfig,
   generateAgentFaceConfig,
+  mergeAgentFaceConfig,
   renderAgentFaceSvg,
   serializeAgentFaceConfig,
   type AgentFaceConfig,
-  type AgentFaceOptionKey
+  type AgentFaceOptionKey,
+  type CharacterType
 } from "@agent-face/core";
 
 import { ActionPanel } from "@/components/playground/ActionPanel";
@@ -123,12 +126,14 @@ export function App() {
     [config, locale, loadingShowcaseMode]
   );
   const configJson = useMemo(() => JSON.stringify(config, null, 2), [config]);
+  const reactExample = useMemo(() => buildReactExample(configJson), [configJson]);
+  const vueExample = useMemo(() => buildVueExample(configJson), [configJson]);
   const shareLabel = isShareCopied ? copy.actions.shareCopied : copy.actions.share;
   const reactCopyLabel = isReactCopied ? copy.reactPanel.copied : copy.reactPanel.copy;
   const vueCopyLabel = isVueCopied ? copy.vuePanel.copied : copy.vuePanel.copy;
 
   function applySeed(seed: string, syncInput = true) {
-    const nextConfig = generateAgentFaceConfig(seed);
+    const nextConfig = generateAgentFaceConfig(seed, config.characterType);
     setConfig(nextConfig);
     if (syncInput) {
       setSeedInput(nextConfig.seed);
@@ -137,11 +142,20 @@ export function App() {
 
   function handleSeedChange(value: string) {
     setSeedInput(value);
-    setConfig(generateAgentFaceConfig(value));
+    setConfig(generateAgentFaceConfig(value, config.characterType));
+  }
+
+  function handleCharacterTypeChange(value: CharacterType) {
+    setConfig((current) => generateAgentFaceConfig(current.seed, value));
   }
 
   function handleConfigChange(key: AgentFaceOptionKey, value: string) {
-    setConfig((current) => ({ ...current, [key]: value }));
+    setConfig((current) =>
+      mergeAgentFaceConfig(current.seed, {
+        ...buildConfigOverrides(current),
+        [key]: value,
+      })
+    );
   }
 
   async function copyText(content: string) {
@@ -173,7 +187,6 @@ export function App() {
   }
 
   function handleCopyReactExample() {
-    const reactExample = `import { AgentFace } from '@agent-face/react'\n\n<AgentFace\n  seed="your-seed"\n  size={120}\n  imageUrl="https://example.com/avatar.png" // Optional\n  imageAlt="Custom avatar"\n  loadingShowcaseMode="skeleton" // skeleton/avatar (Optional)\n/>`;
     void copyText(reactExample).then(() => {
       setIsReactCopied(true);
       if (reactCopyTimerRef.current) {
@@ -186,7 +199,6 @@ export function App() {
   }
 
   function handleCopyVueExample() {
-    const vueExample = `<script setup lang="ts">\nimport { AgentFace } from '@agent-face/vue'\n</script>\n\n<template>\n  <AgentFace\n    seed="your-seed"\n    :size="120"\n    <!-- Optional: show your own image first -->\n    image-url="https://example.com/avatar.png"\n    image-alt="Custom avatar"\n    <!-- Optional: skeleton/avatar -->\n    loading-showcase-mode="skeleton"\n  />\n</template>`;
     void copyText(vueExample).then(() => {
       setIsVueCopied(true);
       if (vueCopyTimerRef.current) {
@@ -325,7 +337,9 @@ export function App() {
             onCopyReactCode={handleCopyReactExample}
             onCopyVueCode={handleCopyVueExample}
             queryString={queryString}
+            reactExample={reactExample}
             reactCopyLabel={reactCopyLabel}
+            vueExample={vueExample}
             vueCopyLabel={vueCopyLabel}
           />
 
@@ -338,23 +352,13 @@ export function App() {
           />
 
           <ConfigPanel
+            characterType={config.characterType}
             locale={locale}
             loadingShowcaseMode={loadingShowcaseMode}
+            onCharacterTypeChange={handleCharacterTypeChange}
             onLoadingShowcaseModeChange={setLoadingShowcaseMode}
             onValueChange={handleConfigChange}
-            values={{
-              shellType: config.shellType,
-              visorType: config.visorType,
-              eyeType: config.eyeType,
-              mouthType: config.mouthType,
-              antennaType: config.antennaType,
-              sideModuleType: config.sideModuleType,
-              neckType: config.neckType,
-              armorType: config.armorType,
-              accessoryType: config.accessoryType,
-              colorPalette: config.colorPalette,
-              backgroundType: config.backgroundType
-            }}
+            values={buildConfigValues(config)}
           />
         </section>
       </main>
@@ -382,4 +386,51 @@ function canvasToBlob(canvas: HTMLCanvasElement, type: string) {
       resolve(blob);
     }, type);
   });
+}
+
+function buildConfigValues(config: AgentFaceConfig): Partial<Record<AgentFaceOptionKey, string>> {
+  const values: Partial<Record<AgentFaceOptionKey, string>> = {};
+
+  for (const key of CHARACTER_TYPE_OPTION_KEYS[config.characterType]) {
+    values[key] = String(config[key as keyof AgentFaceConfig]);
+  }
+
+  return values;
+}
+
+function buildConfigOverrides(config: AgentFaceConfig) {
+  const overrides: { seed: string; characterType: CharacterType } & Partial<Record<AgentFaceOptionKey, string>> = {
+    seed: config.seed,
+    characterType: config.characterType,
+  };
+
+  for (const key of CHARACTER_TYPE_OPTION_KEYS[config.characterType]) {
+    overrides[key] = String(config[key as keyof AgentFaceConfig]);
+  }
+
+  return overrides;
+}
+
+function buildReactExample(configJson: string) {
+  return `import { AgentFace } from '@agent-face/react'
+import type { AgentFaceConfig } from '@agent-face/core'
+
+const config: AgentFaceConfig = ${configJson}
+
+export function Example() {
+  return <AgentFace config={config} size={120} />
+}`;
+}
+
+function buildVueExample(configJson: string) {
+  return `<script setup lang="ts">
+import { AgentFace } from '@agent-face/vue'
+import type { AgentFaceConfig } from '@agent-face/core'
+
+const config: AgentFaceConfig = ${configJson}
+</script>
+
+<template>
+  <AgentFace :config="config" :size="120" />
+</template>`;
 }

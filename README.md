@@ -2,11 +2,11 @@
 
 [中文](./README.zh-CN.md) 
 
-Deterministic SVG robot avatars for agents, wallet addresses, and pseudonymous identities.
+Deterministic SVG character avatars for agents, wallet addresses, and pseudonymous identities.
 
 ![AgentFace avatar gallery](./docs/images/avatar-grid.svg)
 
-AgentFace maps wallet addresses, public keys, hashes, and any stable string to a reproducible robot avatar that fits directly into product UI.
+AgentFace maps wallet addresses, public keys, hashes, and any stable string to a reproducible character avatar that fits directly into product UI.
 
 Built for:
 
@@ -25,6 +25,7 @@ Built for:
 In the playground you can:
 
 - enter a `seed`, address, or any stable identifier
+- switch between `robot`, `human`, `animal`, `plant`, `fish`, and `geo`
 - preview the generated avatar in real time
 - tweak grouped options with URL sync
 - export SVG, PNG, or WebP
@@ -63,16 +64,19 @@ pnpm add @agent-face/vue
 
 ```ts
 import {
+  CHARACTER_TYPES,
   generateAgentFaceConfig,
   renderAgentFaceSvg,
   serializeAgentFaceConfig,
   deserializeAgentFaceConfig,
 } from "@agent-face/core";
 
-const config = generateAgentFaceConfig("0xabc123");
+const config = generateAgentFaceConfig("0xabc123", "fish");
 const svg = renderAgentFaceSvg(config);
 const query = serializeAgentFaceConfig(config);
 const restored = deserializeAgentFaceConfig(query);
+
+console.log(CHARACTER_TYPES);
 ```
 
 ### React Example
@@ -84,6 +88,7 @@ export function Example() {
   return (
     <AgentFace
       seed="demo-agent"
+      characterType="fish"
       size={120}
       imageUrl="https://example.com/avatar.png" // Optional
       imageAlt="Custom avatar"
@@ -104,6 +109,7 @@ import { AgentFace } from "@agent-face/vue";
 <template>
   <AgentFace
     seed="demo-agent"
+    character-type="fish"
     :size="120"
     <!-- Optional: show your own image first -->
     image-url="https://example.com/avatar.png"
@@ -115,7 +121,7 @@ import { AgentFace } from "@agent-face/vue";
 </template>
 ```
 
-If `imageUrl` is provided, the component shows a lightweight placeholder while loading and automatically falls back to AgentFace if the image fails to load.
+If `imageUrl` is provided, the component shows a lightweight placeholder while loading and automatically falls back to AgentFace if the image fails to load. Omitting `characterType` keeps full backward compatibility with the original robot renderer.
 
 ## Packages
 

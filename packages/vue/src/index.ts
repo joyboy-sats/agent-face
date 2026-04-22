@@ -9,6 +9,7 @@ import {
 } from "vue";
 import {
   type AgentFaceConfig,
+  type CharacterType,
   generateAgentFaceConfig,
   renderAgentFaceSvgDataUri,
 } from "@agent-face/core";
@@ -82,6 +83,10 @@ export const AgentFace = defineComponent({
   props: {
     seed: String,
     config: Object as PropType<AgentFaceConfig | undefined>,
+    characterType: {
+      type: String as PropType<CharacterType>,
+      default: "robot",
+    },
     size: {
       type: [Number, String] as PropType<number | string | undefined>,
       default: 160,
@@ -112,7 +117,9 @@ export const AgentFace = defineComponent({
     },
   },
   setup(props, { attrs }) {
-    const resolvedConfig = computed(() => props.config ?? generateAgentFaceConfig(props.seed ?? ""));
+    const resolvedConfig = computed(() =>
+      props.config ?? generateAgentFaceConfig(props.seed ?? "", props.characterType)
+    );
     const fallbackSrc = computed(() => renderAgentFaceSvgDataUri(resolvedConfig.value));
     const currentSrc = ref(normalizeImageUrl(props.imageUrl) ?? fallbackSrc.value);
     const isImageLoading = ref(Boolean(normalizeImageUrl(props.imageUrl)));
@@ -199,4 +206,4 @@ export const AgentFace = defineComponent({
   },
 });
 
-export type { AgentFaceConfig } from "@agent-face/core";
+export type { AgentFaceConfig, CharacterType } from "@agent-face/core";

@@ -72,12 +72,28 @@ describe("@agent-face/vue", () => {
   });
 
   it("prefers explicit config over seed generation", async () => {
-    const config = generateAgentFaceConfig("vue-config-wins");
+    const config = generateAgentFaceConfig("vue-config-wins", "geo");
     const app = createSSRApp({
       render() {
         return h(AgentFace, {
           config,
           seed: "different-seed",
+        });
+      },
+    });
+
+    const markup = await renderAppToString(app);
+
+    expect(markup).toContain(`src="${renderAgentFaceSvgDataUri(config)}"`);
+  });
+
+  it("supports selecting a non-robot character type from props", async () => {
+    const config = generateAgentFaceConfig("vue-fish", "fish");
+    const app = createSSRApp({
+      render() {
+        return h(AgentFace, {
+          seed: "vue-fish",
+          characterType: "fish",
         });
       },
     });

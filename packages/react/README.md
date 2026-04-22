@@ -23,6 +23,7 @@ export function Example() {
   return (
     <AgentFace
       seed="demo-agent"
+      characterType="animal"
       size={120}
       className="rounded-3xl shadow-sm"
       imageUrl="https://example.com/avatar.png"
@@ -35,6 +36,7 @@ export function Example() {
 
 - `seed?: string`
 - `config?: AgentFaceConfig`
+- `characterType?: CharacterType`
 - `size?: number | string`
 - `className?: string`
 - `imageUrl?: string`
@@ -44,6 +46,7 @@ export function Example() {
 ## Notes
 
 - `seed` and `config` are both supported.
+- `characterType` defaults to `"robot"` when omitted.
 - Good fit for wallet UIs, onchain profile cards, member lists, and portfolio dashboards.
 - When `config` is provided, it takes precedence over generated config.
 - When `imageUrl` is provided, the component shows a lightweight sketch placeholder while the image is loading.

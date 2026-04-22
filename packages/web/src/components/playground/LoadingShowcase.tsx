@@ -48,7 +48,11 @@ export function LoadingShowcase({
       >
         {mode === "avatar" ? (
           <div className="grid h-full w-full place-items-center">
-            <AgentFace seed={AGENT_FACE_DEFAULT_SEED} size={48} />
+            <AgentFace
+              characterType={config.characterType}
+              seed={AGENT_FACE_DEFAULT_SEED}
+              size={48}
+            />
           </div>
         ) : (
           <div className="agentface-skeleton-pulse h-full w-full rounded-full bg-muted" />

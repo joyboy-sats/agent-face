@@ -17,35 +17,11 @@ type InfoAccordionProps = {
   onCopyReactCode: () => void;
   onCopyVueCode: () => void;
   queryString: string;
+  reactExample: string;
   reactCopyLabel: string;
+  vueExample: string;
   vueCopyLabel: string;
 };
-
-const REACT_EXAMPLE = `import { AgentFace } from '@agent-face/react'
-
-<AgentFace
-  seed="your-seed"
-  size={120}
-  imageUrl="https://example.com/avatar.png" // Optional
-  imageAlt="Custom avatar"
-  loadingShowcaseMode="skeleton" // skeleton/avatar (Optional)
-/>`;
-
-const VUE_EXAMPLE = `<script setup lang="ts">
-import { AgentFace } from '@agent-face/vue'
-</script>
-
-<template>
-  <AgentFace
-    seed="your-seed"
-    :size="120"
-    <!-- Optional: show your own image first -->
-    image-url="https://example.com/avatar.png"
-    image-alt="Custom avatar"
-    <!-- Optional: skeleton/avatar -->
-    loading-showcase-mode="skeleton"
-  />
-</template>`;
 
 export function InfoAccordion({
   configJson,
@@ -54,7 +30,9 @@ export function InfoAccordion({
   onCopyReactCode,
   onCopyVueCode,
   queryString,
+  reactExample,
   reactCopyLabel,
+  vueExample,
   vueCopyLabel,
 }: InfoAccordionProps) {
   const copy = WEB_COPY[locale];
@@ -75,7 +53,7 @@ export function InfoAccordion({
             <p className="text-sm text-muted-foreground">{copy.reactPanel.description}</p>
           ) : null}
           <CodeBlock
-            code={REACT_EXAMPLE}
+            code={reactExample}
             copied={isReactCopied}
             copyLabel={reactCopyLabel}
             language="tsx"
@@ -96,7 +74,7 @@ export function InfoAccordion({
             <p className="text-sm text-muted-foreground">{copy.vuePanel.description}</p>
           ) : null}
           <CodeBlock
-            code={VUE_EXAMPLE}
+            code={vueExample}
             copied={isVueCopied}
             copyLabel={vueCopyLabel}
             language="tsx"

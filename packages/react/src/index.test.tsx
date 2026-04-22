@@ -58,9 +58,18 @@ describe("@agent-face/react", () => {
   });
 
   it("prefers explicit config over seed generation", () => {
-    const config = generateAgentFaceConfig("config-wins");
+    const config = generateAgentFaceConfig("config-wins", "geo");
     const markup = renderToStaticMarkup(
       <AgentFace config={config} seed="different-seed" />
+    );
+
+    expect(markup).toContain(`src="${renderAgentFaceSvgDataUri(config)}"`);
+  });
+
+  it("supports selecting a non-robot character type from props", () => {
+    const config = generateAgentFaceConfig("react-fish", "fish");
+    const markup = renderToStaticMarkup(
+      <AgentFace characterType="fish" seed="react-fish" />
     );
 
     expect(markup).toContain(`src="${renderAgentFaceSvgDataUri(config)}"`);

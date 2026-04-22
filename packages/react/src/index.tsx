@@ -9,6 +9,7 @@ import {
 } from "react";
 import {
   type AgentFaceConfig,
+  type CharacterType,
   generateAgentFaceConfig,
   renderAgentFaceSvgDataUri
 } from "@agent-face/core";
@@ -83,6 +84,7 @@ function createAvatarPlaceholder(fallbackSrc: string, title: string) {
 export interface AgentFaceProps {
   seed?: string;
   config?: AgentFaceConfig;
+  characterType?: CharacterType;
   size?: number | string;
   className?: string;
   imageUrl?: string;
@@ -98,6 +100,7 @@ export interface AgentFaceProps {
 export function AgentFace({
   seed,
   config,
+  characterType = "robot",
   size = 160,
   className,
   imageUrl,
@@ -110,8 +113,8 @@ export function AgentFace({
   title = "AgentFace avatar"
 }: AgentFaceProps) {
   const resolvedConfig = useMemo(
-    () => config ?? generateAgentFaceConfig(seed ?? ""),
-    [config, seed]
+    () => config ?? generateAgentFaceConfig(seed ?? "", characterType),
+    [characterType, config, seed]
   );
   const fallbackSrc = useMemo(
     () => renderAgentFaceSvgDataUri(resolvedConfig),
@@ -204,4 +207,4 @@ export function AgentFaceDemoCard() {
   );
 }
 
-export type { AgentFaceConfig } from "@agent-face/core";
+export type { AgentFaceConfig, CharacterType } from "@agent-face/core";
