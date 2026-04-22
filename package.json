@@ -12,9 +12,10 @@
   ],
   "scripts": {
     "dev": "vite --config packages/web/vite.config.ts",
+    "build:core": "pnpm --dir packages/core build",
     "build": "tsc -p packages/core/tsconfig.build.json && tsc -p packages/react/tsconfig.build.json && tsc -p packages/vue/tsconfig.build.json && vite build --config packages/web/vite.config.ts",
-    "typecheck": "tsc -p packages/core/tsconfig.json --noEmit && tsc -p packages/react/tsconfig.json --noEmit && tsc -p packages/vue/tsconfig.json --noEmit && tsc -p packages/web/tsconfig.json --noEmit",
-    "test": "vitest run packages/core/src/index.test.ts packages/react/src/index.test.tsx packages/vue/src/index.test.ts",
+    "typecheck": "pnpm run build:core && tsc -p packages/core/tsconfig.json --noEmit && pnpm --dir packages/react typecheck && pnpm --dir packages/vue typecheck && tsc -p packages/web/tsconfig.json --noEmit",
+    "test": "pnpm run build:core && vitest run packages/core/src/index.test.ts packages/react/src/index.test.tsx packages/vue/src/index.test.ts",
     "release:version": "node scripts/release-version.mjs",
     "release:check": "node scripts/check-release-version.mjs"
   },

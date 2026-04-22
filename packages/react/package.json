@@ -58,7 +58,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "prepack": "pnpm --dir ../core build && pnpm build",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "pnpm --dir ../core build && tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "@agent-face/core": "workspace:*"
